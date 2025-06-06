@@ -24,6 +24,8 @@ public class Producer {
             kafkaTemplate.send(topic, message);
         } catch (JsonProcessingException e) {
             logger.error("Exception while serializing the value", e);
+        } catch (Exception e) {
+            logger.error("Exception in sending message", e);
         }
     }
 }
