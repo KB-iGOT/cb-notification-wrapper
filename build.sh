@@ -6,7 +6,7 @@ echo "Docker build script"
 set -eo pipefail
 
 build_tag=$1
-name=cb-notification-wrapper
+name=cb-notification-wrapper-service
 node=$2
 org=$3
 
