@@ -46,4 +46,5 @@ public class CbServerProperties {
 
     @Value("${redis.connection.timeout}")
     private long redisConnectionTimeout;
+
 }

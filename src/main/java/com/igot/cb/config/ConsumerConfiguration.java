@@ -18,6 +18,7 @@ public class ConsumerConfiguration {
     @Value("${spring.kafka.bootstrap.servers}")
     private String springKafkabootstrapAddress;
 
+
     @Value("${kakfa.offset.reset.value}")
     private String kafkaOffsetResetValue;
 
