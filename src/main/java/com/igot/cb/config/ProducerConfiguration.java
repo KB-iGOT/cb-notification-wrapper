@@ -19,14 +19,18 @@ import java.util.Map;
 public class ProducerConfiguration {
 
 
-    @Autowired
-    private CbServerProperties cbServerProperties;
+    @Value("${spring.kafka.bootstrap.servers}")
+    private String springKafkabootstrapAddress;
+
+
+
+ 
     @Bean
     public ProducerFactory<String, String> producerFactory() {
 
         Map<String, Object> config = new HashMap<>();
 
-        config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, PropertiesCache.getInstance().getProperty(cbServerProperties.getKafkaBootStrapServers()));
+        config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, springKafkabootstrapAddress);
         config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         return new DefaultKafkaProducerFactory<>(config);
