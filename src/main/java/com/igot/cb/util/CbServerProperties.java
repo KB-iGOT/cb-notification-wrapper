@@ -49,4 +49,5 @@ public class CbServerProperties {
 
     @Value("${kafka.bootstrap.servers}")
     private String kafkaBootStrapServers;
+
 }
