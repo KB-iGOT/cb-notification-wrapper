@@ -15,16 +15,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 
+
 public class ProducerConfiguration {
 
-    @Value("${spring.kafka.bootstrap.servers}")
-    private String kafkabootstrapAddress;
-
+    @Autowired
+    private CbServerProperties cbServerProperties;
     @Bean
     public ProducerFactory<String, String> producerFactory() {
 
         Map<String, Object> config = new HashMap<>();
-        config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkabootstrapAddress);
+        config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, PropertiesCache.getInstance().getProperty(cbServerProperties.getKafkaBootStrapServers()));
         config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         return new DefaultKafkaProducerFactory<>(config);
