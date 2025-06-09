@@ -14,9 +14,10 @@ import org.springframework.kafka.core.ProducerFactory;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.igot.cb.util.Constants.SPRING_KAFKA_BOOTSTRAP_SETTINGS;
+
 
 public class ProducerConfiguration {
+
 
     @Autowired
     private CbServerProperties cbServerProperties;
@@ -24,7 +25,8 @@ public class ProducerConfiguration {
     public ProducerFactory<String, String> producerFactory() {
 
         Map<String, Object> config = new HashMap<>();
-        config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, PropertiesCache.getInstance().getProperty(cbServerProperties.getSpringKafkaBootStrapServers()));
+
+        config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, PropertiesCache.getInstance().getProperty(cbServerProperties.getKafkaBootStrapServers()));
         config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         return new DefaultKafkaProducerFactory<>(config);

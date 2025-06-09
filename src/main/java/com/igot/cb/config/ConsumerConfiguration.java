@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class ConsumerConfiguration {
 
-    @Value("${spring.kafka.bootstrap.servers}")
+    @Value("${kafka.bootstrap.servers}")
     private String kafkabootstrapAddress;
 
     @Value("${kakfa.offset.reset.value}")
