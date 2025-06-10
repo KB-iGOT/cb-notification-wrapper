@@ -16,7 +16,8 @@ import java.util.Map;
 public class ConsumerConfiguration {
 
     @Value("${spring.kafka.bootstrap.servers}")
-    private String kafkabootstrapAddress;
+    private String springKafkabootstrapAddress;
+
 
     @Value("${kakfa.offset.reset.value}")
     private String kafkaOffsetResetValue;
@@ -49,7 +50,7 @@ public class ConsumerConfiguration {
     @Bean
     public Map<String, Object> consumerConfigs() {
         Map<String, Object> propsMap = new HashMap<>();
-        propsMap.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkabootstrapAddress);
+        propsMap.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, springKafkabootstrapAddress);
         propsMap.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, true);
         propsMap.put(ConsumerConfig.FETCH_MAX_WAIT_MS_CONFIG, "1000");
         propsMap.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, kafkaAutoCommitInterval);
