@@ -115,7 +115,7 @@ public class NotificationServiceImpl implements NotificationService {
                 Map<String, Object> kafkaMessage = Map.of(
                         Constants.USER_IDS, List.of(Map.of(USER_ID, userId)),
                         Constants.TYPE, input.getType() != null ? input.getType().name() : NotificationType.IN_APP,
-                        Constants.SUB_TYPE, NotificationSubType.ALERT,
+                        Constants.SUB_TYPE, input.getSubType() != null ? input.getSubType().name() : NotificationSubType.ALERT,
                         Constants.CATEGORY, category,
                         Constants.SUB_CATEGORY, subCategoryEnum.name(),
                         Constants.SOURCE, input.getSource() != null ? input.getSource().name() : NotificationSource.USER_CREATED,
@@ -176,6 +176,7 @@ public class NotificationServiceImpl implements NotificationService {
                 NotificationSubCategory.LIKED_POST,
                 NotificationSubCategory.LIKED_COMMENT,
                 NotificationSubCategory.REPLIED_POST,
+                NotificationSubCategory.POST_COMMENT,
                 NotificationSubCategory.REPLIED_COMMENT,
                 NotificationSubCategory.SEND_CONNECTION_REQUEST,
                 NotificationSubCategory.ACCEPTED_CONNECTION_REQUEST,
