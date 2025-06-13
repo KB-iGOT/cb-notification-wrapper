@@ -8,7 +8,7 @@ public enum NotificationSubCategory {
     LIKED_POST(NotificationCategory.DISCUSSION, "{userName} liked your post."),
     LIKED_COMMENT(NotificationCategory.DISCUSSION, "{userName} commented on your post."),
     REPLIED_POST(NotificationCategory.DISCUSSION, "{userName} liked your reply."),
-    POST_COMMENT(NotificationCategory.DISCUSSION ,"userName liked on your commented post."),
+    POST_COMMENT(NotificationCategory.DISCUSSION ,"{userName} liked on your commented post."),
     REPLIED_COMMENT(NotificationCategory.DISCUSSION,"{userName} replied to your comment."),
     SEND_CONNECTION_REQUEST(NotificationCategory.NETWORK, "{userName} has sent you a connection request."),
     ACCEPTED_CONNECTION_REQUEST(NotificationCategory.NETWORK, "{userName} accepted your connection request."),
