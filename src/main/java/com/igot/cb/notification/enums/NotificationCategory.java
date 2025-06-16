@@ -5,5 +5,6 @@ public enum NotificationCategory {
     DISCUSSION,
     EVENT,
     NETWORK,
-    PROFILE
+    PROFILE,
+    CONTENT
 }
