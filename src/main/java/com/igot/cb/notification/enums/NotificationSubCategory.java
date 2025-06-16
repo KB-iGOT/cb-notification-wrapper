@@ -1,10 +1,10 @@
 package com.igot.cb.notification.enums;
 
 public enum NotificationSubCategory {
-    CONTENT_REVIEW_REQUEST(NotificationCategory.LEARN, "New content {title} has been submitted for your review"),
-    CONTENT_PUBLISHED(NotificationCategory.LEARN, "Your content {title} has been published successfully."),
-    CONTENT_REJECTED(NotificationCategory.LEARN, "Your content {title} was not approved. Please check reviewer comments."),
-    CONTENT_EDITED(NotificationCategory.LEARN,"Your content {title} was edited by the publisher. Review the changes."),
+    CONTENT_REVIEW_REQUEST(NotificationCategory.CONTENT, "New content {title} has been submitted for your review"),
+    CONTENT_PUBLISHED(NotificationCategory.CONTENT, "Your content {title} has been published successfully."),
+    CONTENT_REJECTED(NotificationCategory.CONTENT, "Your content {title} was not approved. Please check reviewer comments."),
+    CONTENT_EDITED(NotificationCategory.CONTENT,"Your content {title} was edited by the publisher. Review the changes."),
     LIKED_POST(NotificationCategory.DISCUSSION, "{userName} liked your post."),
     LIKED_COMMENT(NotificationCategory.DISCUSSION, "{userName} commented on your post."),
     REPLIED_POST(NotificationCategory.DISCUSSION, "{userName} liked your reply."),
