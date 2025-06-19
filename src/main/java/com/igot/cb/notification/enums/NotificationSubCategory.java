@@ -12,7 +12,9 @@ public enum NotificationSubCategory {
     REPLIED_COMMENT(NotificationCategory.DISCUSSION,"{userName} replied to your comment."),
     SEND_CONNECTION_REQUEST(NotificationCategory.NETWORK, "{userName} has sent you a connection request."),
     ACCEPTED_CONNECTION_REQUEST(NotificationCategory.NETWORK, "{userName} accepted your connection request."),
-    PROFILE_VERIFICATION(NotificationCategory.NETWORK, "A new profile verification request has been submitted for your review");
+    REJECTED_CONNECTION_REQUEST(NotificationCategory.NETWORK, "{userName} rejected your connection request."),
+    PROFILE_VERIFICATION(NotificationCategory.PROFILE, "A new profile verification request has been submitted for your review"),
+    USER_TRANSFER(NotificationCategory.PROFILE,"You have received a new user transfer request.");
 
     private final NotificationCategory category;
     private final String messageTemplate;
