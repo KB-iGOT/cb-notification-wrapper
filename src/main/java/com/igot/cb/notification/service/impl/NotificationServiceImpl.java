@@ -182,7 +182,10 @@ public class NotificationServiceImpl implements NotificationService {
                 NotificationSubCategory.ACCEPTED_CONNECTION_REQUEST,
                 NotificationSubCategory.REJECTED_CONNECTION_REQUEST,
                 NotificationSubCategory.PROFILE_VERIFICATION,
-                NotificationSubCategory.USER_TRANSFER
+                NotificationSubCategory.USER_TRANSFER,
+                NotificationSubCategory.CONTENT_SHARE,
+                NotificationSubCategory.TAGGED_COMMENT,
+                NotificationSubCategory.TAGGED_POST
         ).contains(subCategory);
     }
 
