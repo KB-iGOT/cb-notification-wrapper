@@ -170,6 +170,7 @@ public class NotificationServiceImpl implements NotificationService {
     private boolean isOrgSearchRequired(NotificationSubCategory subCategory) {
         return EnumSet.of(
                 NotificationSubCategory.CONTENT_PUBLISHED,
+                NotificationSubCategory.CONTENT_SPV_PUBLISHED,
                 NotificationSubCategory.CONTENT_REVIEW_REQUEST,
                 NotificationSubCategory.CONTENT_EDITED,
                 NotificationSubCategory.CONTENT_REJECTED,
