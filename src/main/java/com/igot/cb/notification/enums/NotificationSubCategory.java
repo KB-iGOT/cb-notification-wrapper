@@ -17,8 +17,8 @@ public enum NotificationSubCategory {
     PROFILE_VERIFICATION(NotificationCategory.PROFILE, "A new profile verification request has been submitted for your review"),
     USER_TRANSFER(NotificationCategory.PROFILE,"You have received a new user transfer request."),
     CONTENT_SHARE(NotificationCategory.NETWORK,"{userName} shared the content {title} with you."),
-    TAGGED_COMMENT(NotificationCategory.NETWORK,"{userName} mentioned you in their comment/reply."),
-    TAGGED_POST(NotificationCategory.NETWORK,"{userName}  mentioned you in their post (For post tagging).");
+    TAGGED_COMMENT(NotificationCategory.DISCUSSION,"{userName} mentioned you in their comment/reply."),
+    TAGGED_POST(NotificationCategory.DISCUSSION,"{userName}  mentioned you in their post (For post tagging).");
 
     private final NotificationCategory category;
     private final String messageTemplate;
