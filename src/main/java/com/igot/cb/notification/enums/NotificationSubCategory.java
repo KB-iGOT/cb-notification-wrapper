@@ -16,7 +16,7 @@ public enum NotificationSubCategory {
     REJECTED_CONNECTION_REQUEST(NotificationCategory.NETWORK, "{userName} rejected your connection request."),
     PROFILE_VERIFICATION(NotificationCategory.PROFILE, "A new profile verification request has been submitted for your review"),
     USER_TRANSFER(NotificationCategory.PROFILE,"You have received a new user transfer request."),
-    CONTENT_SHARE(NotificationCategory.NETWORK,"{userName} shared the content {title} with you."),
+    CONTENT_SHARE(NotificationCategory.LEARN,"{userName} shared the content {title} with you."),
     TAGGED_COMMENT(NotificationCategory.DISCUSSION,"{userName} mentioned you in their comment/reply."),
     TAGGED_POST(NotificationCategory.DISCUSSION,"{userName}  mentioned you in their post (For post tagging).");
 
