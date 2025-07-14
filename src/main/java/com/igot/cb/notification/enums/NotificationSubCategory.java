@@ -14,11 +14,15 @@ public enum NotificationSubCategory {
     SEND_CONNECTION_REQUEST(NotificationCategory.NETWORK, "{userName} has sent you a connection request."),
     ACCEPTED_CONNECTION_REQUEST(NotificationCategory.NETWORK, "{userName} accepted your connection request."),
     REJECTED_CONNECTION_REQUEST(NotificationCategory.NETWORK, "{userName} rejected your connection request."),
-    PROFILE_VERIFICATION(NotificationCategory.PROFILE, "A new profile verification request has been submitted for your review"),
-    USER_TRANSFER(NotificationCategory.PROFILE,"You have received a new user transfer request."),
+    PROFILE_VERIFICATION(NotificationCategory.PROFILE, "A new profile verification request for {userName}."),
+    PROFILE_UPDATE(NotificationCategory.PROFILE, "Your profile verification has been  updated."),
+    TRANSFER_UPDATE(NotificationCategory.PROFILE, "Your transfer request has been updated."),
+    USER_TRANSFER(NotificationCategory.PROFILE,"You have a new transfer request for {userName} from {title}."),
     CONTENT_SHARE(NotificationCategory.LEARN,"{userName} shared the content {title} with you."),
-    TAGGED_COMMENT(NotificationCategory.DISCUSSION,"{userName} mentioned you in their comment/reply."),
-    TAGGED_POST(NotificationCategory.DISCUSSION,"{userName}  mentioned you in their post (For post tagging).");
+    TAGGED_COMMENT(NotificationCategory.DISCUSSION,"{userName} mentioned you in their comment or reply."),
+    TAGGED_POST(NotificationCategory.DISCUSSION,"{userName}  mentioned you in their post.");
+
+
 
     private final NotificationCategory category;
     private final String messageTemplate;
