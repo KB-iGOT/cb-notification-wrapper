@@ -1,11 +1,9 @@
 package com.igot.cb.notification.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.igot.cb.authentication.util.AccessTokenValidator;
 import com.igot.cb.notification.enums.*;
 import com.igot.cb.notification.request.NotificationRequest;
-import com.igot.cb.notification.service.NotificationService;
 import com.igot.cb.notification.user.UserService;
 import com.igot.cb.producer.Producer;
 import com.igot.cb.util.ApiResponse;
@@ -13,7 +11,6 @@ import com.igot.cb.util.Constants;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 
 import org.springframework.http.HttpStatus;
 
