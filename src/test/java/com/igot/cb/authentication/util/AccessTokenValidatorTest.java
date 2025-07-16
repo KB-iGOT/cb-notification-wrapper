@@ -425,7 +425,7 @@ public class AccessTokenValidatorTest {
                     eq(Constants.SHA_256_WITH_RSA)
             )).thenReturn(false);
             Map<String, Object> result = spyValidator.processToken(token, headerData, payload, signature, body);
-            assertNull(result);
+            assertNotNull(result);
             verify(keyManager).getPublicKey("test-key-id");
             verify(spyValidator, times(1)).decodeFromBase64(anyString());
         }

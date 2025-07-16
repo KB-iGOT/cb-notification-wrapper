@@ -11,32 +11,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class NotificationRequestTest {
 
-//    @Test
-//    void testAllArgsConstructorAndGettersSetters() {
-//        NotificationRequest.NotificationMessage message = new NotificationMessage();
-//        message.setBody("Test body");
-//        message.setPlaceholders(Map.of("key", "value"));
-//        message.setData(Map.of("dataKey", 123));
-//
-//        NotificationRequest request = new NotificationRequest(
-//                NotificationType.EMAIL,
-//                List.of("user1", "user2"),
-//                "org123",
-//                "owner1",
-//                message
-//        );
-//
-//        assertEquals(NotificationType.EMAIL, request.getType());
-//        assertEquals(List.of("user1", "user2"), request.getUserIds());
-//        assertEquals("org123", request.getOrgId());
-//        assertEquals("owner1", request.getContentOwner());
-//        assertEquals(message, request.getMessage());
-//
-//        assertEquals("Test body", message.getBody());
-//        assertEquals("value", message.getPlaceholders().get("key"));
-//        assertEquals(123, message.getData().get("dataKey"));
-//    }
-
     @Test
     void testNoArgsConstructorAndSetters() {
         NotificationRequest request = new NotificationRequest();

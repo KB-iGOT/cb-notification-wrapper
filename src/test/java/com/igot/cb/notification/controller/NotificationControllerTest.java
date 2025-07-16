@@ -34,7 +34,7 @@ class NotificationControllerTest {
         ResponseEntity<ApiResponse> responseEntity = controller.createNotifications(request);
 
         assertNotNull(responseEntity);
-        assertEquals(HttpStatus.OK.value(), responseEntity.getStatusCodeValue());
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(apiResponse, responseEntity.getBody());
 
         verify(notificationService, times(1)).createAndSendNotifications(request);
