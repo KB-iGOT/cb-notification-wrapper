@@ -181,7 +181,6 @@ public class NotificationServiceImpl implements NotificationService {
                 NotificationSubCategory.REPLIED_COMMENT,
                 NotificationSubCategory.SEND_CONNECTION_REQUEST,
                 NotificationSubCategory.ACCEPTED_CONNECTION_REQUEST,
-                NotificationSubCategory.REJECTED_CONNECTION_REQUEST,
                 NotificationSubCategory.PROFILE_VERIFICATION,
                 NotificationSubCategory.PROFILE_UPDATE,
                 NotificationSubCategory.TRANSFER_UPDATE,

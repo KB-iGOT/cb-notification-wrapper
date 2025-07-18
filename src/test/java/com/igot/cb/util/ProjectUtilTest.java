@@ -1,0 +1,32 @@
+package com.igot.cb.util;
+
+import com.igot.cb.exceptions.CustomException;
+import com.igot.cb.exceptions.ResponseCode;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class ProjectUtilTest {
+
+    @Test
+    void testCreateServerError() {
+        ResponseCode rc = ResponseCode.internalError;
+        CustomException ex = ProjectUtil.createServerError(rc);
+
+        assertNotNull(ex);
+        assertEquals(rc.getErrorCode(), ex.getCode());
+        assertEquals(rc.getErrorMessage(), ex.getMessage());
+        assertEquals(ResponseCode.SERVER_ERROR.getResponseCode(), ex.getResponseCode());
+    }
+
+    @Test
+    void testCreateClientError() {
+        ResponseCode rc = ResponseCode.unAuthorized;
+        CustomException ex = ProjectUtil.createClientException(rc);
+
+        assertNotNull(ex);
+        assertEquals(rc.getErrorCode(), ex.getCode());
+        assertEquals(rc.getErrorMessage(), ex.getMessage());
+        assertEquals(ResponseCode.CLIENT_ERROR.getResponseCode(), ex.getResponseCode());
+    }
+}
