@@ -22,8 +22,8 @@ public enum NotificationSubCategory {
     TAGGED_POST(NotificationCategory.DISCUSSION,"{userName}  mentioned you in their post."),
     EVENT_PUBLISHED(NotificationCategory.EVENT,"New event published {Title}"),
     EVENT_ENROLLED(NotificationCategory.EVENT,"new enrollments for {title}"),
-    COURSE_PUBLISHED(NotificationCategory.CONTENT,"new courses have just been published."),
-    PROGRAM_PUBLISHED(NotificationCategory.CONTENT,"New program {title} is now live"),
+    COURSE_PUBLISHED(NotificationCategory.LEARN,"new courses have just been published."),
+    PROGRAM_PUBLISHED(NotificationCategory.LEARN,"New program {title} is now live"),
     LEARN_DISCUSSION_POST_COMMENT(NotificationCategory.DISCUSSION,"New post added to your course {title}"),
     LEARN_DISCUSSION_POST_REPLY(NotificationCategory.DISCUSSION,"New reply added to the course {title}");
 
