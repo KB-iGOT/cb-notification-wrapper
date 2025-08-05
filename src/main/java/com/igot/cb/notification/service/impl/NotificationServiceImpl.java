@@ -187,7 +187,13 @@ public class NotificationServiceImpl implements NotificationService {
                 NotificationSubCategory.USER_TRANSFER,
                 NotificationSubCategory.CONTENT_SHARE,
                 NotificationSubCategory.TAGGED_COMMENT,
-                NotificationSubCategory.TAGGED_POST
+                NotificationSubCategory.TAGGED_POST,
+                NotificationSubCategory.EVENT_PUBLISHED,
+                NotificationSubCategory.EVENT_ENROLLED,
+                NotificationSubCategory.COURSE_PUBLISHED,
+                NotificationSubCategory.LEARN_DISCUSSION_POST_REPLY,
+                NotificationSubCategory.LEARN_DISCUSSION_POST_COMMENT,
+                NotificationSubCategory.PROGRAM_PUBLISHED
         ).contains(subCategory);
     }
 
