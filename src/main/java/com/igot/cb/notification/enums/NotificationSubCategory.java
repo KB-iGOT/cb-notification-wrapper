@@ -25,8 +25,8 @@ public enum NotificationSubCategory {
     COURSE_PUBLISHED(NotificationCategory.LEARN,"new courses have just been published."),
     PROGRAM_PUBLISHED(NotificationCategory.LEARN,"New program {title} is now live"),
     LEARN_DISCUSSION_POST_COMMENT(NotificationCategory.DISCUSSION,"New post added to your course {title}"),
-    LEARN_DISCUSSION_POST_REPLY(NotificationCategory.DISCUSSION,"New reply added to the course {title}");
-
+    LEARN_DISCUSSION_POST_REPLY(NotificationCategory.DISCUSSION,"New reply added to the course {title}"),
+    PROFANITY_CHECK(NotificationCategory.DISCUSSION,"The post is profane!");
 
 
     private final NotificationCategory category;
