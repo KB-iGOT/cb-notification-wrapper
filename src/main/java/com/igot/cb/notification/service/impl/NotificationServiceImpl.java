@@ -194,7 +194,8 @@ public class NotificationServiceImpl implements NotificationService {
                 NotificationSubCategory.LEARN_DISCUSSION_POST_REPLY,
                 NotificationSubCategory.LEARN_DISCUSSION_POST_COMMENT,
                 NotificationSubCategory.PROGRAM_PUBLISHED,
-                NotificationSubCategory.PROFANITY_CHECK
+                NotificationSubCategory.PROFANITY_CHECK,
+                NotificationSubCategory.DELETED_BATCH
         ).contains(subCategory);
     }
 
