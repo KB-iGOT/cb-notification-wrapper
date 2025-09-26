@@ -24,9 +24,10 @@ public enum NotificationSubCategory {
     EVENT_ENROLLED(NotificationCategory.EVENT,"{userName} has enrolled in your event '{title}' scheduled on {Date}."),
     COURSE_PUBLISHED(NotificationCategory.LEARN,"New course '{title}' has been published."),
     PROGRAM_PUBLISHED(NotificationCategory.LEARN,"New program {title} is now live"),
-    LEARN_DISCUSSION_POST_COMMENT(NotificationCategory.DISCUSSION,"{userName} mentioned you in their comment for the content '{title}'"),
-    LEARN_DISCUSSION_POST_REPLY(NotificationCategory.DISCUSSION,"{userName} mentioned you in their reply for the content '{title}'"),
-    PROFANITY_CHECK(NotificationCategory.DISCUSSION,"Your post \"{title}\" has been deleted as it violated our community guidelines");
+    LEARN_DISCUSSION_POST_COMMENT(NotificationCategory.DISCUSSION,"New post added to your course {title}"),
+    LEARN_DISCUSSION_POST_REPLY(NotificationCategory.DISCUSSION,"New reply added to the course {title}"),
+    PROFANITY_CHECK(NotificationCategory.DISCUSSION,"Your post \"{title}\" has been deleted as it violated our community guidelines"),
+    DELETED_BATCH(NotificationCategory.LEARN,"You are no longer part of the {batch} in {program}.");
 
 
     private final NotificationCategory category;
