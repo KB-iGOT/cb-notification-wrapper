@@ -1,9 +1,11 @@
 package com.igot.cb.util;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.igot.cb.exceptions.CustomException;
 import com.networknt.schema.JsonSchema;
 import com.networknt.schema.JsonSchemaFactory;
+import com.networknt.schema.SpecVersion;
 import com.networknt.schema.ValidationMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -18,37 +20,41 @@ import java.util.Set;
 @Service
 public class PayloadValidation {
 
-  private Logger logger = LoggerFactory.getLogger(PayloadValidation.class);
+    private Logger logger = LoggerFactory.getLogger(PayloadValidation.class);
 
-  public void validatePayload(String fileName, JsonNode payload) {
-   log.info("PayloadValidation::validatePayload:inside");
-    try {
-      JsonSchemaFactory schemaFactory = JsonSchemaFactory.getInstance();
-      InputStream schemaStream = schemaFactory.getClass().getResourceAsStream(fileName);
-      JsonSchema schema = schemaFactory.getSchema(schemaStream);
-      if (payload.isArray()) {
-        for (JsonNode objectNode : payload) {
-          validateObject(schema, objectNode);
+    private final JsonSchemaFactory schemaFactory;
+
+    public PayloadValidation(JsonSchemaFactory schemaFactory) {
+        this.schemaFactory = schemaFactory;
+    }
+
+    public void validatePayload(String fileName, JsonNode payload) {
+        log.info("PayloadValidation::validatePayload:inside");
+        try (InputStream schemaStream = getClass().getResourceAsStream(fileName)) {
+            JsonSchema schema = schemaFactory.getSchema(schemaStream);
+            if (payload.isArray()) {
+                for (JsonNode objectNode : payload) {
+                    validateObject(schema, objectNode);
+                }
+            } else {
+                validateObject(schema, payload);
+            }
+        } catch (Exception e) {
+            logger.error("Failed to validate payload", e);
+            throw new CustomException("Failed to validate payload", e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-      } else{
-        validateObject(schema, payload);
-      }
-    } catch (Exception e) {
-      logger.error("Failed to validate payload", e);
-      throw new CustomException("Failed to validate payload", e.getMessage(), HttpStatus.BAD_REQUEST);
     }
-  }
 
-  private void validateObject(JsonSchema schema, JsonNode objectNode) {
-    Set<ValidationMessage> validationMessages = schema.validate(objectNode);
-    if (!validationMessages.isEmpty()) {
-      StringBuilder errorMessage = new StringBuilder("Validation error(s): \n");
-      for (ValidationMessage message : validationMessages) {
-        errorMessage.append(message.getMessage()).append("\n");
-      }
-      logger.error("Validation Error", errorMessage.toString());
-      throw new CustomException("Validation Error", errorMessage.toString(), HttpStatus.BAD_REQUEST);
+    private void validateObject(JsonSchema schema, JsonNode objectNode) {
+        Set<ValidationMessage> validationMessages = schema.validate(objectNode);
+        if (!validationMessages.isEmpty()) {
+            StringBuilder errorMessage = new StringBuilder("Validation error(s): \n");
+            for (ValidationMessage message : validationMessages) {
+                errorMessage.append(message.getMessage()).append("\n");
+            }
+            logger.error("Validation Error", errorMessage.toString());
+            throw new CustomException("Validation Error", errorMessage.toString(), HttpStatus.BAD_REQUEST);
+        }
     }
-  }
 }
 
