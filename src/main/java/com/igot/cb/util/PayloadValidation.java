@@ -1,9 +1,11 @@
 package com.igot.cb.util;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.igot.cb.exceptions.CustomException;
 import com.networknt.schema.JsonSchema;
 import com.networknt.schema.JsonSchemaFactory;
+import com.networknt.schema.SpecVersion;
 import com.networknt.schema.ValidationMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -20,13 +22,16 @@ public class PayloadValidation {
 
   private Logger logger = LoggerFactory.getLogger(PayloadValidation.class);
 
+    private final JsonSchemaFactory schemaFactory;
+
+    public PayloadValidation(JsonSchemaFactory schemaFactory) {
+        this.schemaFactory = schemaFactory;
+    }
   public void validatePayload(String fileName, JsonNode payload) {
    log.info("PayloadValidation::validatePayload:inside");
-    try {
-      JsonSchemaFactory schemaFactory = JsonSchemaFactory.getInstance();
-      InputStream schemaStream = schemaFactory.getClass().getResourceAsStream(fileName);
-      JsonSchema schema = schemaFactory.getSchema(schemaStream);
-      if (payload.isArray()) {
+      try (InputStream schemaStream = getClass().getResourceAsStream(fileName)) {
+          JsonSchema schema = schemaFactory.getSchema(schemaStream);
+          if (payload.isArray()) {
         for (JsonNode objectNode : payload) {
           validateObject(schema, objectNode);
         }
