@@ -27,7 +27,8 @@ public enum NotificationSubCategory {
     LEARN_DISCUSSION_POST_COMMENT(NotificationCategory.DISCUSSION,"New post added to your course {title}"),
     LEARN_DISCUSSION_POST_REPLY(NotificationCategory.DISCUSSION,"New reply added to the course {title}"),
     PROFANITY_CHECK(NotificationCategory.DISCUSSION,"Your post \"{title}\" has been deleted as it violated our community guidelines"),
-    DELETED_BATCH(NotificationCategory.LEARN,"You are no longer part of the {batch} in {program}.");
+    DELETED_BATCH(NotificationCategory.LEARN,"You are no longer part of the {batch} in {program}."),
+    BP_ASSIGNMENT(NotificationCategory.LEARN,"“Your Instructor has uploaded a new assignment for your batch: {assignmentTitle}. Please review and submit.");
 
 
     private final NotificationCategory category;
