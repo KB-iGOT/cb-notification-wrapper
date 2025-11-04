@@ -30,7 +30,7 @@ public enum NotificationSubCategory {
     DELETED_BATCH(NotificationCategory.LEARN,"You are no longer part of the {batch} in {program}."),
     BP_ASSIGNMENT_UPLOAD(NotificationCategory.LEARN,"Your Instructor has uploaded a new assignment for your batch: {assignmentTitle}. Please review and submit."),
     BP_ASSIGNMENT_EVALUATE(NotificationCategory.LEARN,"Your assignment for {assignmentTitle} has been evaluated. You can now view your feedback and score in the portal."),
-    BP_ASSIGNMENT_SUBMIT(NotificationCategory.CONTENT,"Learner {LearnerName} has submitted the assignment {assignmentTitle} for your review.");
+    BP_ASSIGNMENT_SUBMIT(NotificationCategory.CONTENT,"Learner {learnerName} has submitted the assignment {assignmentTitle} for your review.");
 
 
     private final NotificationCategory category;
