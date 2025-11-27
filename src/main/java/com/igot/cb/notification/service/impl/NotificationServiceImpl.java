@@ -9,7 +9,6 @@ import com.igot.cb.notification.request.NotificationRequest;
 import com.igot.cb.notification.service.NotificationService;
 
 import com.igot.cb.util.Constants;
-import com.igot.cb.util.ProjectUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.igot.common.ApiResponse;
@@ -42,7 +41,7 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public ApiResponse createAndSendNotifications(NotificationRequest input) {
-        ApiResponse response = ProjectUtil.createDefaultResponse(USER_NOTIFICATION);
+        ApiResponse response = ApiResponse.createDefaultResponse(USER_NOTIFICATION);
 
         try {
             List<Map<String, Object>> users = new ArrayList<>();

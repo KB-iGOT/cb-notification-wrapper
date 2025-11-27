@@ -1,7 +1,6 @@
 package com.igot.cb.notification.user;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.igot.cb.util.ProjectUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import org.igot.common.ApiResponse;
@@ -35,7 +34,7 @@ public class UserService {
     public ApiResponse searchUsers(JsonNode payload) {
         log.info("UserSearchServiceImpl::searchUsers called");
 
-        ApiResponse outgoingResponse = ProjectUtil.createDefaultResponse("USER_NOTIFICATION_CREATE");
+        ApiResponse outgoingResponse = ApiResponse.createDefaultResponse("USER_NOTIFICATION_CREATE");
 
         if (payload == null || payload.isEmpty()) {
             log.warn("Payload is null or empty.");
