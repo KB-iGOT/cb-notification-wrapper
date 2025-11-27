@@ -2,7 +2,6 @@ package com.igot.cb.notification.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.igot.cb.authentication.util.AccessTokenValidator;
 import com.igot.cb.notification.enums.*;
 import com.igot.cb.notification.user.UserService;
 import com.igot.cb.producer.Producer;
@@ -19,7 +18,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
 
@@ -29,9 +27,6 @@ import static com.igot.cb.util.Constants.*;
 @Service
 @Slf4j
 public class NotificationServiceImpl implements NotificationService {
-
-    @Autowired
-    AccessTokenValidator accessTokenValidator;
 
     @Autowired
     private UserService userService;
