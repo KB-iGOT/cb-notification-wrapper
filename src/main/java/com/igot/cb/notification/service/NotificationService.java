@@ -1,7 +1,8 @@
 package com.igot.cb.notification.service;
 
+import org.igot.common.ApiResponse;
+
 import com.igot.cb.notification.request.NotificationRequest;
-import com.igot.cb.util.ApiResponse;
 
 public interface NotificationService {
 

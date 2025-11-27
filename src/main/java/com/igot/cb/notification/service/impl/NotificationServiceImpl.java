@@ -8,12 +8,11 @@ import com.igot.cb.producer.Producer;
 import com.igot.cb.notification.request.NotificationRequest;
 import com.igot.cb.notification.service.NotificationService;
 
-import com.igot.cb.util.ApiResponse;
 import com.igot.cb.util.Constants;
 import com.igot.cb.util.ProjectUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.igot.common.ApiResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -28,18 +27,18 @@ import static com.igot.cb.util.Constants.*;
 @Slf4j
 public class NotificationServiceImpl implements NotificationService {
 
-    @Autowired
     private UserService userService;
-
-    @Autowired
     private ObjectMapper mapper;
-
-    @Autowired
     private Producer producer;
 
     @Value("${kafka.topic.name}")
     private String topicName;
 
+    public NotificationServiceImpl(UserService userService, Producer producer, ObjectMapper mapper) {
+        this.userService = userService;
+        this.producer = producer;
+        this.mapper = mapper;
+    }
 
     @Override
     public ApiResponse createAndSendNotifications(NotificationRequest input) {

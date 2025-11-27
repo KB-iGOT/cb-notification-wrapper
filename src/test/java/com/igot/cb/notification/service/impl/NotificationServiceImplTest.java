@@ -5,9 +5,9 @@ import com.igot.cb.notification.enums.*;
 import com.igot.cb.notification.request.NotificationRequest;
 import com.igot.cb.notification.user.UserService;
 import com.igot.cb.producer.Producer;
-import com.igot.cb.util.ApiResponse;
 import com.igot.cb.util.Constants;
 
+import org.igot.common.ApiResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -28,11 +28,11 @@ class NotificationServiceImplTest {
 
     @BeforeEach
     void setUp() throws Exception {
-        service = new NotificationServiceImpl();
-
         userService = mock(UserService.class);
         mapper = new ObjectMapper();
         producer = mock(Producer.class);
+
+        service = new NotificationServiceImpl(userService, producer, mapper);
 
         setPrivateField("userService", userService);
         setPrivateField("mapper", mapper);

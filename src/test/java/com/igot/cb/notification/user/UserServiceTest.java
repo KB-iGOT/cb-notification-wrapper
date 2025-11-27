@@ -2,7 +2,8 @@ package com.igot.cb.notification.user;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.igot.cb.util.ApiResponse;
+
+import org.igot.common.ApiResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -28,8 +29,8 @@ class UserServiceTest {
 
     @BeforeEach
     void setUp() throws Exception {
-        userService = new UserService();
         restTemplate = mock(RestTemplate.class);
+        userService = new UserService(restTemplate);
 
         setPrivateField("sbApiKey", "dummy-api-key");
         setPrivateField("restTemplate", restTemplate);

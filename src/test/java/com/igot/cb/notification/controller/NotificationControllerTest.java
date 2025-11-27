@@ -2,7 +2,6 @@ package com.igot.cb.notification.controller;
 
 import com.igot.cb.notification.request.NotificationRequest;
 import com.igot.cb.notification.service.NotificationService;
-import com.igot.cb.util.ApiResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
@@ -10,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+
+import org.igot.common.ApiResponse;
 
 class NotificationControllerTest {
 
@@ -19,8 +20,7 @@ class NotificationControllerTest {
     @BeforeEach
     void setUp() {
         notificationService = mock(NotificationService.class);
-        controller = new NotificationController();
-        controller.notificationService = notificationService;
+        controller = new NotificationController(notificationService);
     }
 
     @Test

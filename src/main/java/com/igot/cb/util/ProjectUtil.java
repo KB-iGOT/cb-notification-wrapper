@@ -1,9 +1,7 @@
 package com.igot.cb.util;
 
-import com.igot.cb.exceptions.CustomException;
-import com.igot.cb.exceptions.ResponseCode;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.igot.common.ApiRespParam;
+import org.igot.common.ApiResponse;
 import org.springframework.http.HttpStatus;
 import java.util.*;
 
@@ -11,26 +9,6 @@ import java.util.*;
  * This class will contains all the common utility methods.
  */
 public class ProjectUtil {
-
-//    private final Logger logger = LoggerFactory.getLogger(ExtendedServiceImpl.class);
-private final Logger logger = LoggerFactory.getLogger(Object.class);
-
-    /**
-     * This method will create and return server exception to caller.
-     *
-     * @param responseCode ResponseCode
-     * @return ProjectCommonException
-     */
-    public static CustomException createServerError(ResponseCode responseCode) {
-        return new CustomException(responseCode.getErrorCode(), responseCode.getErrorMessage(),
-                ResponseCode.SERVER_ERROR.getResponseCode());
-    }
-
-    public static CustomException createClientException(ResponseCode responseCode) {
-        return new CustomException(responseCode.getErrorCode(), responseCode.getErrorMessage(),
-                ResponseCode.CLIENT_ERROR.getResponseCode());
-    }
-
     public static ApiResponse createDefaultResponse(String api) {
         ApiResponse response = new ApiResponse();
         response.setId(api);
