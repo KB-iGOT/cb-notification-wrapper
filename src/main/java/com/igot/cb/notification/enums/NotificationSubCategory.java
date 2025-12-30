@@ -31,7 +31,11 @@ public enum NotificationSubCategory {
     BP_ASSIGNMENT_UPLOAD(NotificationCategory.LEARN,"Your Instructor has uploaded a new assignment for your batch: {assignmentTitle}. Please review and submit."),
     BP_ASSIGNMENT_EVALUATE(NotificationCategory.LEARN,"Your assignment for {assignmentTitle} has been evaluated. You can now view your feedback and score in the portal."),
     BP_ASSIGNMENT_SUBMIT(NotificationCategory.CONTENT,"Learner {learnerName} has submitted the assignment {assignmentTitle} for your review."),
-    INSTRUCTOR_ADD_BATCH(NotificationCategory.CONTENT, "You have been added as an Instructor to “{programName}”.");
+    INSTRUCTOR_ADD_BATCH(NotificationCategory.CONTENT, "You have been added as an Instructor to “{programName}”."),
+    RETIRE_SCHEDULED(NotificationCategory.CONTENT,"Retirement Scheduled for “{title}” "),
+    PUBLISHED_NEW_VERSION(NotificationCategory.CONTENT,"New Version Published for “{title}” "),
+    RETIRED(NotificationCategory.CONTENT,"“{title}” Has Been Successfully Retired");
+
 
 
     private final NotificationCategory category;
