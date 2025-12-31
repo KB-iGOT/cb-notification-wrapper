@@ -38,7 +38,6 @@ public enum NotificationSubCategory {
             "Access to this course version has now been closed.");
 
 
-
     private final NotificationCategory category;
     private final String messageTemplate;
 
