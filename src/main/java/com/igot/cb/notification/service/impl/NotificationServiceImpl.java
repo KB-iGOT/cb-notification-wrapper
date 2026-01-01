@@ -203,7 +203,8 @@ public class NotificationServiceImpl implements NotificationService {
                 NotificationSubCategory.APPROVED_CONTENT_RETIREMENT,
                 NotificationSubCategory.CONTENT_RETIREMENT_SEVEN_DAYS,
                 NotificationSubCategory.CONTENT_RETIREMENT_ONE_DAYS,
-                NotificationSubCategory.CONTENT_FINALLY_RETIRED
+                NotificationSubCategory.CONTENT_FINALLY_RETIRED,
+                NotificationSubCategory.RETIRED_REJECTED
         ).contains(subCategory);
     }
 
