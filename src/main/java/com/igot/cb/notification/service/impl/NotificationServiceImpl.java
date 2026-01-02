@@ -73,7 +73,6 @@ public class NotificationServiceImpl implements NotificationService {
             } else {
                 return errorResponse(response, "No user information provided", HttpStatus.BAD_REQUEST);
             }
-
             NotificationSubCategory subCategoryEnum = input.getSubCategory();
             String template = subCategoryEnum.getMessageTemplate();
             NotificationCategory category = subCategoryEnum.getCategory();
@@ -96,12 +95,10 @@ public class NotificationServiceImpl implements NotificationService {
                     userName = placeholders.getOrDefault(USER_NAME, EMPTY_STRING);
                     placeholders.put(USER_NAME, userName);
                 }
-
                 String customizedBody = template;
                 for (Map.Entry<String, String> entry : placeholders.entrySet()) {
                     customizedBody = customizedBody.replace("{" + entry.getKey() + "}", Optional.ofNullable(entry.getValue()).orElse(EMPTY_STRING));
                 }
-
                 Map<String, Object> messageMap = new HashMap<>();
 
                 if (StringUtils.hasText(customizedBody)) {
@@ -111,7 +108,6 @@ public class NotificationServiceImpl implements NotificationService {
                 if (message.getData() != null && !message.getData().isEmpty()) {
                     messageMap.put(DATA, message.getData());
                 }
-
                 Map<String, Object> kafkaMessage = Map.of(
                         Constants.USER_IDS, List.of(Map.of(USER_ID, userId)),
                         Constants.TYPE, input.getType() != null ? input.getType().name() : NotificationType.IN_APP,
