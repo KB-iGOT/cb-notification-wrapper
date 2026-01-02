@@ -195,7 +195,12 @@ public class NotificationServiceImpl implements NotificationService {
                 NotificationSubCategory.BP_ASSIGNMENT_UPLOAD,
                 NotificationSubCategory.BP_ASSIGNMENT_EVALUATE,
                 NotificationSubCategory.BP_ASSIGNMENT_SUBMIT,
-                NotificationSubCategory.INSTRUCTOR_ADD_BATCH
+                NotificationSubCategory.INSTRUCTOR_ADD_BATCH,
+                NotificationSubCategory.APPROVED_CONTENT_RETIREMENT,
+                NotificationSubCategory.CONTENT_RETIREMENT_SEVEN_DAYS,
+                NotificationSubCategory.CONTENT_RETIREMENT_ONE_DAYS,
+                NotificationSubCategory.CONTENT_FINALLY_RETIRED,
+                NotificationSubCategory.RETIRED_REJECTED
         ).contains(subCategory);
     }
 
