@@ -108,6 +108,11 @@ public class NotificationServiceImpl implements NotificationService {
                 if (message.getData() != null && !message.getData().isEmpty()) {
                     messageMap.put(DATA, message.getData());
                 }
+                if (subCategoryEnum == NotificationSubCategory.CONTENT_RETIREMENT_SEVEN_DAYS
+                        || subCategoryEnum == NotificationSubCategory.CONTENT_RETIREMENT_ONE_DAYS
+                        || subCategoryEnum == NotificationSubCategory.APPROVED_CONTENT_RETIREMENT) {
+                    subCategoryEnum = NotificationSubCategory.CONTENT_RETIRE;
+                }
                 Map<String, Object> kafkaMessage = Map.of(
                         Constants.USER_IDS, List.of(Map.of(USER_ID, userId)),
                         Constants.TYPE, input.getType() != null ? input.getType().name() : NotificationType.IN_APP,
@@ -199,8 +204,9 @@ public class NotificationServiceImpl implements NotificationService {
                 NotificationSubCategory.APPROVED_CONTENT_RETIREMENT,
                 NotificationSubCategory.CONTENT_RETIREMENT_SEVEN_DAYS,
                 NotificationSubCategory.CONTENT_RETIREMENT_ONE_DAYS,
-                NotificationSubCategory.CONTENT_FINALLY_RETIRED,
-                NotificationSubCategory.RETIRED_REJECTED
+                NotificationSubCategory.CONTENT_RETIRED,
+                NotificationSubCategory.RETIRE_REJECTED,
+                NotificationSubCategory.RETIRE_APPROVED
         ).contains(subCategory);
     }
 
