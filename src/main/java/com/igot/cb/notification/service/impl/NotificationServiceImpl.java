@@ -73,7 +73,6 @@ public class NotificationServiceImpl implements NotificationService {
             } else {
                 return errorResponse(response, "No user information provided", HttpStatus.BAD_REQUEST);
             }
-
             NotificationSubCategory subCategoryEnum = input.getSubCategory();
             String template = subCategoryEnum.getMessageTemplate();
             NotificationCategory category = subCategoryEnum.getCategory();
@@ -96,12 +95,10 @@ public class NotificationServiceImpl implements NotificationService {
                     userName = placeholders.getOrDefault(USER_NAME, EMPTY_STRING);
                     placeholders.put(USER_NAME, userName);
                 }
-
                 String customizedBody = template;
                 for (Map.Entry<String, String> entry : placeholders.entrySet()) {
                     customizedBody = customizedBody.replace("{" + entry.getKey() + "}", Optional.ofNullable(entry.getValue()).orElse(EMPTY_STRING));
                 }
-
                 Map<String, Object> messageMap = new HashMap<>();
 
                 if (StringUtils.hasText(customizedBody)) {
@@ -111,7 +108,11 @@ public class NotificationServiceImpl implements NotificationService {
                 if (message.getData() != null && !message.getData().isEmpty()) {
                     messageMap.put(DATA, message.getData());
                 }
-
+                if (subCategoryEnum == NotificationSubCategory.CONTENT_RETIREMENT_SEVEN_DAYS
+                        || subCategoryEnum == NotificationSubCategory.CONTENT_RETIREMENT_ONE_DAYS
+                        || subCategoryEnum == NotificationSubCategory.APPROVED_CONTENT_RETIREMENT) {
+                    subCategoryEnum = NotificationSubCategory.CONTENT_RETIRE;
+                }
                 Map<String, Object> kafkaMessage = Map.of(
                         Constants.USER_IDS, List.of(Map.of(USER_ID, userId)),
                         Constants.TYPE, input.getType() != null ? input.getType().name() : NotificationType.IN_APP,
@@ -199,7 +200,13 @@ public class NotificationServiceImpl implements NotificationService {
                 NotificationSubCategory.BP_ASSIGNMENT_UPLOAD,
                 NotificationSubCategory.BP_ASSIGNMENT_EVALUATE,
                 NotificationSubCategory.BP_ASSIGNMENT_SUBMIT,
-                NotificationSubCategory.INSTRUCTOR_ADD_BATCH
+                NotificationSubCategory.INSTRUCTOR_ADD_BATCH,
+                NotificationSubCategory.APPROVED_CONTENT_RETIREMENT,
+                NotificationSubCategory.CONTENT_RETIREMENT_SEVEN_DAYS,
+                NotificationSubCategory.CONTENT_RETIREMENT_ONE_DAYS,
+                NotificationSubCategory.CONTENT_RETIRED,
+                NotificationSubCategory.RETIRE_REJECTED,
+                NotificationSubCategory.RETIRE_APPROVED
         ).contains(subCategory);
     }
 

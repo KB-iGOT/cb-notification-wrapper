@@ -31,7 +31,17 @@ public enum NotificationSubCategory {
     BP_ASSIGNMENT_UPLOAD(NotificationCategory.LEARN,"Your Instructor has uploaded a new assignment for your batch: {assignmentTitle}. Please review and submit."),
     BP_ASSIGNMENT_EVALUATE(NotificationCategory.LEARN,"Your assignment for {assignmentTitle} has been evaluated. You can now view your feedback and score in the portal."),
     BP_ASSIGNMENT_SUBMIT(NotificationCategory.CONTENT,"Learner {learnerName} has submitted the assignment {assignmentTitle} for your review."),
-    INSTRUCTOR_ADD_BATCH(NotificationCategory.CONTENT, "You have been added as an Instructor to “{programName}”.");
+    INSTRUCTOR_ADD_BATCH(NotificationCategory.CONTENT, "You have been added as an Instructor to “{programName}”."),
+    RETIRE_SCHEDULED(NotificationCategory.CONTENT,"This is to inform you that the course “{title}” has been scheduled for retirement and will be retired on {Date}."),
+    PUBLISHED_NEW_VERSION(NotificationCategory.CONTENT,"A new version of the course “{title}” has been successfully published on the platform."),
+    RETIRED(NotificationCategory.CONTENT, "This is to formally notify you that the course “{title}” has been successfully retired and is no longer available for consumption on the platform. " + "Access to this course version has now been closed."),
+    APPROVED_CONTENT_RETIREMENT(NotificationCategory.LEARN, "This is to inform you that the course “{courseName}” will be retired on {retirementDate}. " +"You are advised to kindly complete any pending learning before this date, as access to the course will be discontinued following its retirement."),
+    CONTENT_RETIREMENT_SEVEN_DAYS(NotificationCategory.LEARN, "Reminder: The course “{courseName}” is scheduled to be retired on {retirementDate}. " + "Reminder Type: {reminderType}. " + "You are requested to complete your learning at the earliest, as access will be disabled post-retirement."),
+    CONTENT_RETIREMENT_ONE_DAYS(NotificationCategory.LEARN, "Reminder: The course “{courseName}” is scheduled to be retired on {retirementDate}. " + "Reminder Type: {reminderType}. " + "You are requested to complete your learning at the earliest, as access will be disabled post-retirement."),
+    CONTENT_RETIRED(NotificationCategory.LEARN, "The course “{courseName}” has now been retired and is no longer accessible on the platform. " + "If a new version of the course is available, you may enroll in it to continue your learning journey."),
+    RETIRE_REJECTED(NotificationCategory.CONTENT,"This is to formally notify you that the course “{title}” has been rejected and will not be retired at this time. "+ "Please review the feedback provided and take the necessary action."),
+    RETIRE_APPROVED(NotificationCategory.CONTENT, "This is to formally notify you that the course “{title}” has been approved for retirement. " + "The course will be retired as per the scheduled timeline."),
+    CONTENT_RETIRE(NotificationCategory.LEARN, "");
 
 
     private final NotificationCategory category;
