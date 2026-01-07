@@ -39,7 +39,7 @@ public enum NotificationSubCategory {
     CONTENT_RETIREMENT_SEVEN_DAYS(NotificationCategory.LEARN, "Reminder: The course “{courseName}” is scheduled to be retired on {retirementDate}. " + "Reminder Type: {reminderType}. " + "You are requested to complete your learning at the earliest, as access will be disabled post-retirement."),
     CONTENT_RETIREMENT_ONE_DAYS(NotificationCategory.LEARN, "Reminder: The course “{courseName}” is scheduled to be retired on {retirementDate}. " + "Reminder Type: {reminderType}. " + "You are requested to complete your learning at the earliest, as access will be disabled post-retirement."),
     CONTENT_RETIRED(NotificationCategory.LEARN, "The course “{courseName}” has now been retired and is no longer accessible on the platform. " + "If a new version of the course is available, you may enroll in it to continue your learning journey."),
-    RETIRE_REJECTED(NotificationCategory.CONTENT,"This is to formally notify you that the course “{title}” has been rejected and will not be retired at this time. "+ "Please review the feedback provided and take the necessary action."),
+    RETIRE_REJECTED(NotificationCategory.CONTENT,"This is to formally notify you that the course “{title}” has been rejected and will not be retired at this time. "),
     RETIRE_APPROVED(NotificationCategory.CONTENT, "This is to formally notify you that the course “{title}” has been approved for retirement. " + "The course will be retired as per the scheduled timeline."),
     CONTENT_RETIRE(NotificationCategory.LEARN, "");
 
