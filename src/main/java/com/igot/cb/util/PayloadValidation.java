@@ -1,13 +1,13 @@
 package com.igot.cb.util;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.igot.cb.exceptions.CustomException;
 import com.networknt.schema.JsonSchema;
 import com.networknt.schema.JsonSchemaFactory;
+import com.networknt.schema.SpecVersion;
 import com.networknt.schema.ValidationMessage;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import org.igot.common.CustomException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -17,13 +17,10 @@ import java.util.Set;
 @Slf4j
 @Service
 public class PayloadValidation {
-
-  private Logger logger = LoggerFactory.getLogger(PayloadValidation.class);
-
   public void validatePayload(String fileName, JsonNode payload) {
    log.info("PayloadValidation::validatePayload:inside");
     try {
-      JsonSchemaFactory schemaFactory = JsonSchemaFactory.getInstance();
+      JsonSchemaFactory schemaFactory = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7);
       InputStream schemaStream = schemaFactory.getClass().getResourceAsStream(fileName);
       JsonSchema schema = schemaFactory.getSchema(schemaStream);
       if (payload.isArray()) {
@@ -34,7 +31,7 @@ public class PayloadValidation {
         validateObject(schema, payload);
       }
     } catch (Exception e) {
-      logger.error("Failed to validate payload", e);
+      log.error("Failed to validate payload", e);
       throw new CustomException("Failed to validate payload", e.getMessage(), HttpStatus.BAD_REQUEST);
     }
   }
@@ -46,7 +43,7 @@ public class PayloadValidation {
       for (ValidationMessage message : validationMessages) {
         errorMessage.append(message.getMessage()).append("\n");
       }
-      logger.error("Validation Error", errorMessage.toString());
+      log.error("Validation Error: " + errorMessage.toString());
       throw new CustomException("Validation Error", errorMessage.toString(), HttpStatus.BAD_REQUEST);
     }
   }

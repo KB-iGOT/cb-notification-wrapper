@@ -6,7 +6,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,7 +23,7 @@ public class FileProcessServiceTest {
 
     @Before
     public void setUp() {
-        MockitoAnnotations.initMocks(this);
+        fileProcessService = new FileProcessService();
     }
 
     @Test
@@ -40,7 +39,7 @@ public class FileProcessServiceTest {
     }
 
     @Test
-    public void testProcessCsvFile_Success() throws IOException {
+    public void testProcessCsvFile_Success() {
         MultipartFile file = createTestCsvFile();
         List<Map<String, String>> result = fileProcessService.processExcelFile(file);
         assertNotNull("Result should not be null", result);

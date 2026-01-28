@@ -1,11 +1,9 @@
 package com.igot.cb.notification.user;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.igot.cb.util.ApiResponse;
-import com.igot.cb.util.ProjectUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import org.igot.common.ApiResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
@@ -27,14 +25,16 @@ public class UserService {
     @Value("${sb.api.key}")
     private String sbApiKey;
 
-    @Autowired
     private RestTemplate restTemplate;
 
+    public UserService(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
 
     public ApiResponse searchUsers(JsonNode payload) {
         log.info("UserSearchServiceImpl::searchUsers called");
 
-        ApiResponse outgoingResponse = ProjectUtil.createDefaultResponse("USER_NOTIFICATION_CREATE");
+        ApiResponse outgoingResponse = ApiResponse.createDefaultResponse("USER_NOTIFICATION_CREATE");
 
         if (payload == null || payload.isEmpty()) {
             log.warn("Payload is null or empty.");

@@ -5,6 +5,8 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.poi.ss.usermodel.*;
+import org.igot.common.CustomException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -12,6 +14,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -25,7 +28,7 @@ public class FileProcessService {
       return validateFileAndProcessRows(incomingFile);
     } catch (Exception e) {
       log.error("Error occurred during file processing: {}", e.getMessage());
-      throw new RuntimeException(e.getMessage());
+      throw new CustomException(Constants.PARSE_ERROR, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
   private List<Map<String, String>> validateFileAndProcessRows(MultipartFile file) {
@@ -33,7 +36,7 @@ public class FileProcessService {
 
     String fileName = file.getOriginalFilename();
     if (fileName == null) {
-      throw new RuntimeException("File name is null");
+      throw new CustomException(Constants.PARSE_ERROR, "File name is null", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     try (InputStream inputStream = file.getInputStream()) {
@@ -45,11 +48,11 @@ public class FileProcessService {
       } else if (fileName.endsWith(".csv")) {
         return processCsvAndSendMessage(inputStream);
       } else {
-        throw new RuntimeException("Unsupported file type: " + fileName);
+        throw new CustomException(Constants.PARSE_ERROR, "Unsupported file type: " + fileName, HttpStatus.INTERNAL_SERVER_ERROR);
       }
     } catch (IOException e) {
       log.error("Error while processing file: {}", e.getMessage());
-      throw new RuntimeException("Error processing file", e);
+      throw new CustomException(Constants.PARSE_ERROR, "Error processing file: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -78,7 +81,7 @@ public class FileProcessService {
                   && DateUtil.isCellDateFormatted(valueCell)) {
                 // Handle date format
                 Date date = valueCell.getDateCellValue();
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+                SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.DATE_FORMAT);
                 cellValue = dateFormat.format(date);
               } else {
                 cellValue = formatter.formatCellValue(valueCell).replace("\n", ",").trim();
@@ -97,7 +100,7 @@ public class FileProcessService {
       return dataRows;
     } catch (Exception e) {
       log.error(e.getMessage());
-      throw new RuntimeException(e.getMessage());
+      throw new CustomException(Constants.PARSE_ERROR, "Failed to process: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -105,7 +108,7 @@ public class FileProcessService {
     log.info("DesignationServiceImpl::processCsvAndSendMessage");
     List<Map<String, String>> dataRows = new ArrayList<>();
     try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-        CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT.withFirstRecordAsHeader())) {
+        CSVParser csvParser = CSVFormat.DEFAULT.builder().setHeader().setSkipHeaderRecord(true).build().parse(reader)) {
 
       List<String> headers = csvParser.getHeaderNames();
 
@@ -117,7 +120,7 @@ public class FileProcessService {
           if (cellValue != null && !cellValue.trim().isEmpty()) {
             // Handle date format (assuming date is in a specific format)
             if (isDate(cellValue)) {
-              SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+              SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.DATE_FORMAT);
               cellValue = dateFormat.format(parseDate(cellValue));
             } else {
               cellValue = cellValue.replace("\n", ",").trim();
@@ -134,7 +137,7 @@ public class FileProcessService {
       log.info("Number of Data Rows Processed: " + dataRows.size());
     } catch (Exception e) {
       log.error(e.getMessage());
-      throw new RuntimeException(e.getMessage());
+      throw new CustomException(Constants.PARSE_ERROR, "Failed to process: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
     return dataRows;
   }
@@ -148,9 +151,9 @@ public class FileProcessService {
     }
   }
 
-  private Date parseDate(String value) throws Exception {
+  private Date parseDate(String value) throws ParseException {
     // Customize this date parsing logic based on the expected date format in your CSV
-    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+    SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.DATE_FORMAT);
     return dateFormat.parse(value);
   }
 

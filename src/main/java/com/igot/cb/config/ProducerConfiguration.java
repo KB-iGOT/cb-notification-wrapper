@@ -1,10 +1,7 @@
 package com.igot.cb.config;
 
-import com.igot.cb.util.CbServerProperties;
-import com.igot.cb.util.PropertiesCache;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,19 +15,12 @@ import java.util.Map;
 
 @Configuration
 public class ProducerConfiguration {
-
-
     @Value("${spring.kafka.bootstrap.servers}")
     private String springKafkabootstrapAddress;
-
-
-
  
     @Bean
     public ProducerFactory<String, String> producerFactory() {
-
         Map<String, Object> config = new HashMap<>();
-
         config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, springKafkabootstrapAddress);
         config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
@@ -41,5 +31,4 @@ public class ProducerConfiguration {
     public KafkaTemplate<String, String> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
     }
-
 }

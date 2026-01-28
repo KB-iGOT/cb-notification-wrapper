@@ -2,9 +2,9 @@ package com.igot.cb.notification.controller;
 
 import com.igot.cb.notification.request.NotificationRequest;
 import com.igot.cb.notification.service.NotificationService;
-import com.igot.cb.util.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import org.igot.common.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,8 +13,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/notifications")
 public class NotificationController {
 
-    @Autowired
     NotificationService notificationService;
+
+    public NotificationController(NotificationService notificationService) {
+        this.notificationService = notificationService;
+    }
 
     @PostMapping("/create")
     public ResponseEntity<ApiResponse> createNotifications(@RequestBody NotificationRequest request) {

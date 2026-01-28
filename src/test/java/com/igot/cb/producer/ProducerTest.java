@@ -17,8 +17,8 @@ class ProducerTest {
 
     @BeforeEach
     void setUp() throws Exception {
-        producer = new Producer();
         kafkaTemplate = mock(KafkaTemplate.class);
+        producer = new Producer(kafkaTemplate);
 
         Field field = Producer.class.getDeclaredField("kafkaTemplate");
         field.setAccessible(true);

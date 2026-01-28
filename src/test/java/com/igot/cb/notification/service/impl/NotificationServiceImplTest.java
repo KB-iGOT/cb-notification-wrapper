@@ -1,14 +1,13 @@
 package com.igot.cb.notification.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.igot.cb.authentication.util.AccessTokenValidator;
 import com.igot.cb.notification.enums.*;
 import com.igot.cb.notification.request.NotificationRequest;
 import com.igot.cb.notification.user.UserService;
 import com.igot.cb.producer.Producer;
-import com.igot.cb.util.ApiResponse;
 import com.igot.cb.util.Constants;
 
+import org.igot.common.ApiResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -23,21 +22,18 @@ import static org.mockito.Mockito.*;
 class NotificationServiceImplTest {
 
     private NotificationServiceImpl service;
-    private AccessTokenValidator accessTokenValidator;
     private UserService userService;
     private ObjectMapper mapper;
     private Producer producer;
 
     @BeforeEach
     void setUp() throws Exception {
-        service = new NotificationServiceImpl();
-
-        accessTokenValidator = mock(AccessTokenValidator.class);
         userService = mock(UserService.class);
         mapper = new ObjectMapper();
         producer = mock(Producer.class);
 
-        setPrivateField("accessTokenValidator", accessTokenValidator);
+        service = new NotificationServiceImpl(userService, producer, mapper);
+
         setPrivateField("userService", userService);
         setPrivateField("mapper", mapper);
         setPrivateField("producer", producer);

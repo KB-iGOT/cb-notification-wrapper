@@ -2,24 +2,20 @@ package com.igot.cb.notification.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.igot.cb.authentication.util.AccessTokenValidator;
 import com.igot.cb.notification.enums.*;
 import com.igot.cb.notification.user.UserService;
 import com.igot.cb.producer.Producer;
 import com.igot.cb.notification.request.NotificationRequest;
 import com.igot.cb.notification.service.NotificationService;
 
-import com.igot.cb.util.ApiResponse;
 import com.igot.cb.util.Constants;
-import com.igot.cb.util.ProjectUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.igot.common.ApiResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
 
@@ -30,25 +26,22 @@ import static com.igot.cb.util.Constants.*;
 @Slf4j
 public class NotificationServiceImpl implements NotificationService {
 
-    @Autowired
-    AccessTokenValidator accessTokenValidator;
-
-    @Autowired
     private UserService userService;
-
-    @Autowired
     private ObjectMapper mapper;
-
-    @Autowired
     private Producer producer;
 
     @Value("${kafka.topic.name}")
     private String topicName;
 
+    public NotificationServiceImpl(UserService userService, Producer producer, ObjectMapper mapper) {
+        this.userService = userService;
+        this.producer = producer;
+        this.mapper = mapper;
+    }
 
     @Override
     public ApiResponse createAndSendNotifications(NotificationRequest input) {
-        ApiResponse response = ProjectUtil.createDefaultResponse(USER_NOTIFICATION);
+        ApiResponse response = ApiResponse.createDefaultResponse(USER_NOTIFICATION);
 
         try {
             List<Map<String, Object>> users = new ArrayList<>();
