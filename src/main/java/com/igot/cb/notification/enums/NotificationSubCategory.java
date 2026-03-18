@@ -41,7 +41,8 @@ public enum NotificationSubCategory {
     CONTENT_RETIRED(NotificationCategory.LEARN, "The course “{courseName}” has now been retired and is no longer accessible on the platform. " + "If a new version of the course is available, you may enroll in it to continue your learning journey."),
     RETIRE_REJECTED(NotificationCategory.CONTENT,"This is to formally notify you that the course “{title}” has been rejected and will not be retired at this time. "),
     RETIRE_APPROVED(NotificationCategory.CONTENT, "This is to formally notify you that the course “{title}” has been approved for retirement. " + "The course will be retired as per the scheduled timeline."),
-    CONTENT_RETIRE(NotificationCategory.LEARN, "");
+    CONTENT_RETIRE(NotificationCategory.LEARN, ""),
+    AWARD_BADGES(NotificationCategory.LEARN, "Congratulations! You have earned the '{badgeTitle}' badge for completing {courseName}.");
 
 
     private final NotificationCategory category;
