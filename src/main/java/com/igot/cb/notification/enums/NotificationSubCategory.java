@@ -42,7 +42,7 @@ public enum NotificationSubCategory {
     RETIRE_REJECTED(NotificationCategory.CONTENT,"This is to formally notify you that the course “{title}” has been rejected and will not be retired at this time. "),
     RETIRE_APPROVED(NotificationCategory.CONTENT, "This is to formally notify you that the course “{title}” has been approved for retirement. " + "The course will be retired as per the scheduled timeline."),
     CONTENT_RETIRE(NotificationCategory.LEARN, ""),
-    AWARD_BADGES(NotificationCategory.LEARN, "Congratulations! You have earned the '{badgeTitle}' badge for completing {courseName}.");
+    AWARD_BADGES(NotificationCategory.LEARN, "Congratulations! You have earned the '{badgeTitle}' badge for completing '{courseName}'.");
 
 
     private final NotificationCategory category;
