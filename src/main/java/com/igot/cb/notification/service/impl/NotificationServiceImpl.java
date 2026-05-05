@@ -206,7 +206,8 @@ public class NotificationServiceImpl implements NotificationService {
                 NotificationSubCategory.CONTENT_RETIREMENT_ONE_DAYS,
                 NotificationSubCategory.CONTENT_RETIRED,
                 NotificationSubCategory.RETIRE_REJECTED,
-                NotificationSubCategory.RETIRE_APPROVED
+                NotificationSubCategory.RETIRE_APPROVED,
+                NotificationSubCategory.EXTERNAL_TRAINING
         ).contains(subCategory);
     }
 
