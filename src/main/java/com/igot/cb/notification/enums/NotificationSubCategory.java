@@ -43,7 +43,7 @@ public enum NotificationSubCategory {
     RETIRE_APPROVED(NotificationCategory.CONTENT, "This is to formally notify you that the course “{title}” has been approved for retirement. " + "The course will be retired as per the scheduled timeline."),
     CONTENT_RETIRE(NotificationCategory.LEARN, ""),
     AWARD_BADGES(NotificationCategory.LEARN, "Congratulations! You have earned the '{badgeTitle}' badge for completing '{courseName}'."),
-    EXTERNAL_TRAINING(NotificationCategory.LEARN, "You have been added to “{courseName}” by your MDO.");
+    EXTERNAL_TRAINING(NotificationCategory.LEARN, "You have successfully completed the following training/certification: “{courseName}”. This will also be reflected in your Learner Passbook.");
 
 
     private final NotificationCategory category;
