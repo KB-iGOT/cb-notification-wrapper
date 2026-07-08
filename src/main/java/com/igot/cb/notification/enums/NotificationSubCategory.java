@@ -44,8 +44,8 @@ public enum NotificationSubCategory {
     CONTENT_RETIRE(NotificationCategory.LEARN, ""),
     AWARD_BADGES(NotificationCategory.LEARN, "Congratulations! You have earned the '{badgeTitle}' badge for completing '{courseName}'."),
     EXTERNAL_TRAINING(NotificationCategory.LEARN, "You have successfully completed the following training/certification: “{courseName}”. This will also be reflected in your Learner Passbook."),
-    ENROLLMENT_UNENROLL(NotificationCategory.LEARN,"You have successfully unenrolled from {courseName}."),
-    ENROLLMENT_REENROLL(NotificationCategory.LEARN,"You have successfully reenrolled in {courseName}.");
+    ENROLLMENT_UNENROLL(NotificationCategory.LEARN,"You have successfully unenrolled from '{courseName}'."),
+    ENROLLMENT_REENROLL(NotificationCategory.LEARN,"You have successfully reenrolled in '{courseName}'.");
 
 
     private final NotificationCategory category;
