@@ -208,8 +208,8 @@ public class NotificationServiceImpl implements NotificationService {
                 NotificationSubCategory.RETIRE_REJECTED,
                 NotificationSubCategory.RETIRE_APPROVED,
                 NotificationSubCategory.EXTERNAL_TRAINING,
-                NotificationSubCategory.ENROLLMENT_UNENROLL,
-                NotificationSubCategory.ENROLLMENT_REENROLL
+                NotificationSubCategory.CONTENT_UN_ENROLLED,
+                NotificationSubCategory.CONTENT_RE_ENROLLED
         ).contains(subCategory);
     }
 
