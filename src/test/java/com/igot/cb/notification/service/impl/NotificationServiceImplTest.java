@@ -11,6 +11,7 @@ import com.igot.cb.util.Constants;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 
 import org.springframework.http.HttpStatus;
 
@@ -108,6 +109,48 @@ class NotificationServiceImplTest {
         ApiResponse response = service.createAndSendNotifications(request);
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getResponseCode());
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    void testCreateAndSendNotifications_programCoordinatorAdded_rendersPlaceholders() {
+        NotificationRequest.NotificationMessage message = new NotificationRequest.NotificationMessage();
+        Map<String, String> placeholders = new HashMap<>();
+        placeholders.put("userName", "Alice");
+        placeholders.put("title", "Sample Blended Program");
+        placeholders.put("roleName", "National Lead Trainer");
+        message.setPlaceholders(placeholders);
+        message.setData(Map.of("programId", "prog-1"));
+
+        NotificationRequest request = new NotificationRequest(
+                NotificationType.IN_APP,
+                NotificationSubType.ENGAGEMENT,
+                NotificationCategory.CONTENT,
+                NotificationSubCategory.PROGRAM_COORDINATOR_ADDED,
+                NotificationSource.SYSTEM_CREATED,
+                null,
+                List.of("user1"),
+                null,
+                null,
+                message
+        );
+
+        ApiResponse response = service.createAndSendNotifications(request);
+
+        assertEquals(HttpStatus.OK, response.getResponseCode());
+
+        ArgumentCaptor<Map<String, Object>> payloadCaptor = ArgumentCaptor.forClass(Map.class);
+        verify(producer).push(eq("test-topic"), payloadCaptor.capture());
+
+        Map<String, Object> kafkaMessage = (Map<String, Object>) payloadCaptor.getValue().get(Constants.REQUEST);
+        Map<String, Object> messageMap = (Map<String, Object>) kafkaMessage.get(Constants.MESSAGE);
+        String body = (String) messageMap.get(Constants.BODY);
+
+        assertEquals("You have been added as an National Lead Trainer to Sample Blended Program. "
+                + "Please log in to view the program details and assigned responsibilities.", body);
+
+        Map<String, Object> data = (Map<String, Object>) messageMap.get(Constants.DATA);
+        assertEquals("prog-1", data.get("programId"));
     }
 
     @Test
