@@ -1,17 +1,21 @@
 package com.igot.cb.util;
 
+import com.igot.cb.exceptions.CustomException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.poi.ss.usermodel.*;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.swing.text.html.Option;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -19,13 +23,17 @@ import java.util.*;
 @Service
 public class FileProcessService {
 
+  private static final String UTC_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+
   public List<Map<String, String>> processExcelFile(MultipartFile incomingFile) {
     log.info("DesignationServiceImpl::processExcelFile");
     try {
       return validateFileAndProcessRows(incomingFile);
+    } catch (CustomException e) {
+      throw e;
     } catch (Exception e) {
       log.error("Error occurred during file processing: {}", e.getMessage());
-      throw new RuntimeException(e.getMessage());
+      throw new CustomException("FILE_PROCESSING_ERROR", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
   private List<Map<String, String>> validateFileAndProcessRows(MultipartFile file) {
@@ -33,7 +41,7 @@ public class FileProcessService {
 
     String fileName = file.getOriginalFilename();
     if (fileName == null) {
-      throw new RuntimeException("File name is null");
+      throw new CustomException("FILE_NAME_MISSING", "File name is null", HttpStatus.BAD_REQUEST);
     }
 
     try (InputStream inputStream = file.getInputStream()) {
@@ -45,11 +53,11 @@ public class FileProcessService {
       } else if (fileName.endsWith(".csv")) {
         return processCsvAndSendMessage(inputStream);
       } else {
-        throw new RuntimeException("Unsupported file type: " + fileName);
+        throw new CustomException("UNSUPPORTED_FILE_TYPE", "Unsupported file type: " + fileName, HttpStatus.BAD_REQUEST);
       }
     } catch (IOException e) {
       log.error("Error while processing file: {}", e.getMessage());
-      throw new RuntimeException("Error processing file", e);
+      throw new CustomException("FILE_PROCESSING_ERROR", "Error processing file: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -60,36 +68,9 @@ public class FileProcessService {
       Row headerRow = sheet.getRow(0);
       List<Map<String, String>> dataRows = new ArrayList<>();
       for (int rowIndex = 1; rowIndex <= sheet.getLastRowNum(); rowIndex++) {
-        Row dataRow = sheet.getRow(rowIndex);
-        if (dataRow == null) {
-          break; // No more data rows, exit the loop
-        }
-        boolean allBlank = true;
-        Map<String, String> rowData = new HashMap<>();
-        for (int colIndex = 0; colIndex < headerRow.getLastCellNum(); colIndex++) {
-          Cell headerCell = headerRow.getCell(colIndex);
-          Cell valueCell = dataRow.getCell(colIndex);
-          if (headerCell != null && headerCell.getCellType() != CellType.BLANK) {
-            String excelHeader =
-                formatter.formatCellValue(headerCell).replaceAll("[\\n*]", "").trim();
-            String cellValue = "";
-            if (valueCell != null && valueCell.getCellType() != CellType.BLANK) {
-              if (valueCell.getCellType() == CellType.NUMERIC
-                  && DateUtil.isCellDateFormatted(valueCell)) {
-                // Handle date format
-                Date date = valueCell.getDateCellValue();
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-                cellValue = dateFormat.format(date);
-              } else {
-                cellValue = formatter.formatCellValue(valueCell).replace("\n", ",").trim();
-              }
-              allBlank = false;
-            }
-            rowData.put(excelHeader, cellValue);
-          }
-        }
-        if (allBlank) {
-          break; // If all cells are blank in the current row, stop processing
+        Map<String, String> rowData = processRow(sheet, headerRow, rowIndex, formatter);
+        if (rowData.isEmpty()) {
+          break;
         }
         dataRows.add(rowData);
       }
@@ -97,15 +78,52 @@ public class FileProcessService {
       return dataRows;
     } catch (Exception e) {
       log.error(e.getMessage());
-      throw new RuntimeException(e.getMessage());
+      throw new CustomException("EXCEL_SHEET_PROCESSING_ERROR", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
+  }
+
+  private Map<String, String> processRow(Sheet sheet, Row headerRow, int rowIndex, DataFormatter formatter) {
+    Row dataRow = sheet.getRow(rowIndex);
+    if (dataRow == null) {
+      return Collections.emptyMap(); // No more data rows
+    }
+
+    boolean allBlank = true;
+    Map<String, String> rowData = new HashMap<>();
+
+    for (int colIndex = 0; colIndex < headerRow.getLastCellNum(); colIndex++) {
+      Cell headerCell = headerRow.getCell(colIndex);
+      Cell valueCell = dataRow.getCell(colIndex);
+
+      if (headerCell != null && headerCell.getCellType() != CellType.BLANK) {
+        String excelHeader = formatter.formatCellValue(headerCell).replaceAll("[\\n*]", "");
+        String cellValue = "";
+
+        if (valueCell != null && valueCell.getCellType() != CellType.BLANK) {
+          if (valueCell.getCellType() == CellType.NUMERIC && DateUtil.isCellDateFormatted(valueCell)) {
+            Date date = valueCell.getDateCellValue();
+            SimpleDateFormat dateFormat = new SimpleDateFormat(UTC_DATE_FORMAT);
+            cellValue = dateFormat.format(date);
+          } else {
+            cellValue = formatter.formatCellValue(valueCell).replace("\n", "");
+          }
+          allBlank = false;
+        }
+        rowData.put(excelHeader, cellValue);
+      }
+    }
+
+    return allBlank ? Collections.emptyMap() : rowData; // Signal "stop" if row is entirely blank too
   }
 
   private List<Map<String, String>> processCsvAndSendMessage(InputStream inputStream) throws IOException {
     log.info("DesignationServiceImpl::processCsvAndSendMessage");
     List<Map<String, String>> dataRows = new ArrayList<>();
     try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-        CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT.withFirstRecordAsHeader())) {
+        CSVParser csvParser = new CSVParser(reader, CSVFormat.Builder.create(CSVFormat.DEFAULT)
+            .setHeader()
+            .setSkipHeaderRecord(true)
+            .build())) {
 
       List<String> headers = csvParser.getHeaderNames();
 
@@ -117,7 +135,7 @@ public class FileProcessService {
           if (cellValue != null && !cellValue.trim().isEmpty()) {
             // Handle date format (assuming date is in a specific format)
             if (isDate(cellValue)) {
-              SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+              SimpleDateFormat dateFormat = new SimpleDateFormat(UTC_DATE_FORMAT);
               cellValue = dateFormat.format(parseDate(cellValue));
             } else {
               cellValue = cellValue.replace("\n", ",").trim();
@@ -134,7 +152,7 @@ public class FileProcessService {
       log.info("Number of Data Rows Processed: " + dataRows.size());
     } catch (Exception e) {
       log.error(e.getMessage());
-      throw new RuntimeException(e.getMessage());
+      throw new CustomException("CSV_PROCESSING_ERROR", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
     return dataRows;
   }
@@ -148,9 +166,9 @@ public class FileProcessService {
     }
   }
 
-  private Date parseDate(String value) throws Exception {
+  private Date parseDate(String value) throws ParseException {
     // Customize this date parsing logic based on the expected date format in your CSV
-    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+    SimpleDateFormat dateFormat = new SimpleDateFormat(UTC_DATE_FORMAT);
     return dateFormat.parse(value);
   }
 

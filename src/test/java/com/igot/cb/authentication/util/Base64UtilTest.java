@@ -1,12 +1,15 @@
 package com.igot.cb.authentication.util;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
+import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Random;
 
+@Slf4j
 public class Base64UtilTest {
 
     @Test
@@ -93,6 +96,7 @@ public class Base64UtilTest {
             assertNotNull(result);
             assertEquals(0, result.length);
         } catch (IllegalArgumentException e) {
+            log.error("Caught expected IllegalArgumentException for invalid Base64 input: {}", e.getMessage());
         }
     }
 
@@ -323,5 +327,75 @@ public class Base64UtilTest {
         System.arraycopy(encoded, 0, paddedEncoded, 5, encoded.length);
         byte[] decoded = Base64Util.decode(paddedEncoded, 5, encoded.length, Base64Util.DEFAULT);
         assertEquals(originalStr, new String(decoded, StandardCharsets.UTF_8));
+    }
+
+    private static void setDecoderState(Base64Util.Decoder decoder, int state) throws Exception {
+        Field stateField = Base64Util.Decoder.class.getDeclaredField("state");
+        stateField.setAccessible(true);
+        stateField.set(decoder, state);
+    }
+
+    @Test
+    public void testDecoderProcess_unexpectedState_hitsMainLoopDefaultBranch() throws Exception {
+        Base64Util.Decoder decoder = new Base64Util.Decoder(Base64Util.DEFAULT, new byte[16]);
+        setDecoderState(decoder, 7); // not a valid state (0-6)
+
+        boolean result = decoder.process("A".getBytes(StandardCharsets.UTF_8), 0, 1, false);
+
+        assertTrue("process() should still report healthy input and just log the unexpected state", result);
+        assertEquals(0, decoder.op);
+    }
+
+    @Test
+    public void testDecoderProcess_unexpectedState_hitsFinishDefaultBranch() throws Exception {
+        Base64Util.Decoder decoder = new Base64Util.Decoder(Base64Util.DEFAULT, new byte[16]);
+        setDecoderState(decoder, 7); // not a valid state (0-6)
+
+        boolean result = decoder.process(new byte[0], 0, 0, true);
+
+        assertTrue("process() should still report healthy input and just log the unexpected state", result);
+        assertEquals(0, decoder.op);
+    }
+
+    @Test
+    public void testEncoderProcess_unexpectedTailLen_hitsDefaultBranch() {
+        Base64Util.Encoder encoder = new Base64Util.Encoder(Base64Util.NO_WRAP, new byte[16]);
+        encoder.tailLen = 3; // not a valid tail length (0-2)
+
+        boolean result = encoder.process(new byte[]{1, 2, 3}, 0, 3, false);
+
+        assertTrue("process() should still succeed and just log the unexpected tailLen", result);
+    }
+
+    @Test
+    public void testEncodeToString_exceptionFromEncode_isWrappedAsAssertionError() {
+        try {
+            Base64Util.encodeToString(null, Base64Util.DEFAULT);
+            fail("Expected an AssertionError wrapping the underlying exception");
+        } catch (AssertionError e) {
+            assertNotNull(e.getCause());
+        }
+    }
+
+    @Test
+    public void testEncodeToStringWithOffsetLen_exceptionFromEncode_isWrappedAsAssertionError() {
+        try {
+            Base64Util.encodeToString(null, 0, 5, Base64Util.DEFAULT);
+            fail("Expected an AssertionError wrapping the underlying exception");
+        } catch (AssertionError e) {
+            assertNotNull(e.getCause());
+        }
+    }
+
+    @Test
+    public void testDecode_oneExtraTrailingCharacter_hitsSetStateAndReturnFalseCaseOne() {
+        assertThrows(IllegalArgumentException.class,
+                () -> Base64Util.decode("QUJDQ", Base64Util.DEFAULT));
+    }
+
+    @Test
+    public void testDecode_missingSecondPaddingCharacter_hitsSetStateAndReturnFalseCaseFour() {
+        assertThrows(IllegalArgumentException.class,
+                () -> Base64Util.decode("QQ=", Base64Util.DEFAULT));
     }
 }

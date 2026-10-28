@@ -61,36 +61,17 @@ public class AccessTokenValidatorTest {
     }
 
     /**
-     * Test fetching user ID when an exception occurs.
-     * This test verifies that the method returns null when an exception is thrown
-     * during the process, as explicitly handled in the method implementation.
+     * Test fetching user ID for tokens that should all resolve to null: one that
+     * triggers an exception during processing, a null token, and one that resolves
+     * to UNAUTHORIZED - all explicitly handled the same way by the method implementation.
      */
     @Test
-    public void testFetchUserIdFromAccessToken_ExceptionOccurs() {
-        String result = accessTokenValidator.fetchUserIdFromAccessToken("exception_token");
-        assertNull(result);
-    }
-
-    /**
-     * Test fetching user ID from a null access token.
-     * This test verifies that the method returns null when given a null access token,
-     * as explicitly handled in the method implementation.
-     */
-    @Test
-    public void testFetchUserIdFromAccessToken_NullToken() {
-        String result = accessTokenValidator.fetchUserIdFromAccessToken(null);
-        assertNull(result);
-    }
-
-    /**
-     * Test fetching user ID from an access token that results in UNAUTHORIZED.
-     * This test verifies that the method returns null when the verifyUserToken method
-     * returns UNAUTHORIZED, as explicitly handled in the method implementation.
-     */
-    @Test
-    public void testFetchUserIdFromAccessToken_UnauthorizedToken() {
-        String result = accessTokenValidator.fetchUserIdFromAccessToken("invalid_token");
-        assertNull(result);
+    public void testFetchUserIdFromAccessToken_returnsNullForInvalidTokens() {
+        String[] invalidTokens = {"exception_token", null, "invalid_token"};
+        for (String token : invalidTokens) {
+            String result = accessTokenValidator.fetchUserIdFromAccessToken(token);
+            assertNull("Expected null result for token: " + token, result);
+        }
     }
 
     /**
@@ -103,7 +84,7 @@ public class AccessTokenValidatorTest {
      */
     @Test
     public void testValidateTokenWithInvalidFormatAndSignature() {
-        AccessTokenValidator validator = new AccessTokenValidator();
+        AccessTokenValidator validator = new AccessTokenValidator(keyManager);
         String invalidToken = "header.body";
         Map<String, Object> result = validator.validateToken(invalidToken);
         assertTrue("Result should be an empty map for invalid token", result.isEmpty());
@@ -115,7 +96,7 @@ public class AccessTokenValidatorTest {
      */
     @Test
     public void test_checkIss_whenIssuerDoesNotMatchRealmUrl() {
-        AccessTokenValidator validator = new AccessTokenValidator();
+        AccessTokenValidator validator = new AccessTokenValidator(keyManager);
         String invalidIssuer = "https://invalid-issuer.com";
         assertFalse(validator.checkIss(invalidIssuer));
     }
@@ -127,8 +108,7 @@ public class AccessTokenValidatorTest {
      */
     @Test
     public void test_checkIss_whenIssuerMatchesRealmUrl() {
-        PropertiesCache realPropertiesCache = PropertiesCache.getInstance();
-        AccessTokenValidator validator = new AccessTokenValidator();
+        AccessTokenValidator validator = new AccessTokenValidator(keyManager);
         AccessTokenValidator spyValidator = Mockito.spy(validator);
         String validIssuer = "https://example.com/auth/realms/myrealm";
         doReturn(true).when(spyValidator).checkIss(validIssuer);
@@ -145,7 +125,7 @@ public class AccessTokenValidatorTest {
     @Test
     public void test_fetchUserIdFromAccessToken_returnsNullWhenUnauthorized() {
         // Create a spy instead of trying to mock the @InjectMocks object
-        AccessTokenValidator validator = new AccessTokenValidator();
+        AccessTokenValidator validator = new AccessTokenValidator(keyManager);
         AccessTokenValidator spyValidator = Mockito.spy(validator);
         String accessToken = "validAccessToken";
         doReturn(Constants.UNAUTHORIZED).when(spyValidator).verifyUserToken(accessToken);
@@ -161,7 +141,7 @@ public class AccessTokenValidatorTest {
      */
     @Test
     public void test_fetchUserIdFromAccessToken_validToken() {
-        AccessTokenValidator validator = new AccessTokenValidator();
+        AccessTokenValidator validator = new AccessTokenValidator(keyManager);
         AccessTokenValidator spyValidator = Mockito.spy(validator);
         String validAccessToken = "valid_access_token";
         String expectedUserId = "user123";
@@ -178,7 +158,7 @@ public class AccessTokenValidatorTest {
      */
     @Test
     public void test_fetchUserIdFromAccessToken_whenAccessTokenIsNull() {
-        AccessTokenValidator validator = new AccessTokenValidator();
+        AccessTokenValidator validator = new AccessTokenValidator(keyManager);
         String result = validator.fetchUserIdFromAccessToken(null);
         assertNull("Expected null result when accessToken is null", result);
     }
@@ -190,7 +170,7 @@ public class AccessTokenValidatorTest {
      */
     @Test
     public void test_validateToken_invalidTokenFormat() {
-        AccessTokenValidator validator = new AccessTokenValidator();
+        AccessTokenValidator validator = new AccessTokenValidator(keyManager);
         String invalidToken = "header.body";
         Map<String, Object> result = validator.validateToken(invalidToken);
         assertEquals(0, result.size());
@@ -214,7 +194,7 @@ public class AccessTokenValidatorTest {
      */
     @Test
     public void test_validateToken_nullToken() {
-        AccessTokenValidator validator = new AccessTokenValidator();
+        AccessTokenValidator validator = new AccessTokenValidator(keyManager);
         String nullToken = null;
         Map<String, Object> result = validator.validateToken(nullToken);
         assertEquals(0, result.size());
@@ -257,7 +237,7 @@ public class AccessTokenValidatorTest {
 
     @Test
     public void test_verifyUserToken_invalidTokenOrIssuer() {
-        AccessTokenValidator validator = Mockito.spy(new AccessTokenValidator());
+        AccessTokenValidator validator = Mockito.spy(new AccessTokenValidator(keyManager));
         String invalidToken = "invalid.token.here";
         Mockito.doReturn(Collections.emptyMap()).when(validator).validateToken(invalidToken);
         lenient().doReturn(false).when(validator).checkIss(Mockito.anyString());
@@ -266,37 +246,17 @@ public class AccessTokenValidatorTest {
     }
 
     /**
-     * Test verifyUserToken with an empty token.
-     * This test verifies that an empty token is treated as invalid and returns UNAUTHORIZED.
+     * Test verifyUserToken with an empty token, an invalid-format token, and a null
+     * token - all treated as invalid and expected to return UNAUTHORIZED.
      */
     @Test
-    public void test_verifyUserToken_emptyToken() {
-        AccessTokenValidator validator = new AccessTokenValidator();
-        String result = validator.verifyUserToken("");
-        assertEquals(Constants.UNAUTHORIZED, result);
-    }
-
-    /**
-     * Test verifyUserToken with an invalid token format.
-     * This test checks if the method handles tokens with invalid format by returning UNAUTHORIZED.
-     */
-    @Test
-    public void test_verifyUserToken_invalidTokenFormat() {
-        AccessTokenValidator validator = new AccessTokenValidator();
-        String result = validator.verifyUserToken("invalid.token");
-        assertEquals(Constants.UNAUTHORIZED, result);
-    }
-
-
-    /**
-     * Test verifyUserToken with a null token.
-     * This test checks if the method handles null input by returning UNAUTHORIZED.
-     */
-    @Test
-    public void test_verifyUserToken_nullToken() {
-        AccessTokenValidator validator = new AccessTokenValidator();
-        String result = validator.verifyUserToken(null);
-        assertEquals(Constants.UNAUTHORIZED, result);
+    public void test_verifyUserToken_returnsUnauthorizedForInvalidTokens() {
+        AccessTokenValidator validator = new AccessTokenValidator(keyManager);
+        String[] invalidTokens = {"", "invalid.token", null};
+        for (String token : invalidTokens) {
+            String result = validator.verifyUserToken(token);
+            assertEquals("Expected UNAUTHORIZED for token: " + token, Constants.UNAUTHORIZED, result);
+        }
     }
 
     /**
@@ -306,7 +266,7 @@ public class AccessTokenValidatorTest {
      */
     @Test
     public void test_verifyUserToken_validTokenWithValidUserId() {
-        AccessTokenValidator validator = Mockito.spy(new AccessTokenValidator());
+        AccessTokenValidator validator = Mockito.spy(new AccessTokenValidator(keyManager));
         String validToken = "valid.token.here";
         Map<String, Object> mockPayload = new HashMap<>();
         mockPayload.put("iss", "valid_issuer");
@@ -327,7 +287,7 @@ public class AccessTokenValidatorTest {
      */
     @Test
     public void test_verifyUserToken_withValidPayloadAndIssuerButBlankUserId() {
-        AccessTokenValidator spyValidator = Mockito.spy(new AccessTokenValidator());
+        AccessTokenValidator spyValidator = Mockito.spy(new AccessTokenValidator(keyManager));
         String token = "validToken";
         Map<String, Object> payload = new HashMap<>();
         payload.put("iss", "validIssuer");

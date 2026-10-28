@@ -2,7 +2,6 @@ package com.igot.cb.notification.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.igot.cb.authentication.util.AccessTokenValidator;
 import com.igot.cb.notification.enums.*;
 import com.igot.cb.notification.user.UserService;
 import com.igot.cb.producer.Producer;
@@ -30,20 +29,19 @@ import static com.igot.cb.util.Constants.*;
 @Slf4j
 public class NotificationServiceImpl implements NotificationService {
 
-    @Autowired
-    AccessTokenValidator accessTokenValidator;
-
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private ObjectMapper mapper;
-
-    @Autowired
-    private Producer producer;
+    private final UserService userService;
+    private final ObjectMapper mapper;
+    private final Producer producer;
 
     @Value("${kafka.topic.name}")
     private String topicName;
+
+    @Autowired
+    public NotificationServiceImpl(UserService userService, ObjectMapper mapper, Producer producer) {
+        this.userService = userService;
+        this.mapper = mapper;
+        this.producer = producer;
+    }
 
 
     @Override
